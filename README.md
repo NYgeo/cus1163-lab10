@@ -366,17 +366,23 @@ After completing the lab, answer these questions:
 
 1. **Security Risk**: Why is a world-writable directory (like `uploads/`) more dangerous than a world-writable file?
    What could an attacker do?
+  `` A world-writable directory lets any user create, delete, or replace files inside it. That can lead to code execution, data tampering, or privilege escalation if another service writes/executes from that directory.``
 
 2. **Permission Bits**: Explain what `-perm -002` means versus `-perm /111`. Why do we use different options for
    different searches?
+    ``-perm -002 matches anything with the “others write” bit set (world-writable), while -perm /111 matches anything with any execute bit set for user/group/others. We use different tests because one checks “can anyone modify this?” and the other checks “is this runnable as a program?``
 
 3. **Real-World Impact**: If you ran this scanner on a production web server and found 50 world-writable files, what
    immediate actions should you take?
+  `` Immediately restrict permissions by removing world-write/execute as appropriate, identify who/what set them through audit logs, and check for compromises like unexpected changes to files. Prioritize configs, web roots, and shared directories, then patch and re-scan. ``
 
 4. **Process Substitution**: Explain why using `find ... | while read` doesn't work for counting, but `while read ... done < <(find ...)` does. What is the difference?
+``find ... | while read ... runs the while loop in a subshell, so changes to count disappear when the loop ends. ``
+
 
 5. **Automation**: How would you schedule this script to run automatically every day at 2 AM and email the results to a
    security team?
+   ``Put the script in a cron job to run every day at 2 AM. Have the cron command email (or save) the script’s output so the security team gets the results automatically.``
 
 ## What You're Learning
 
